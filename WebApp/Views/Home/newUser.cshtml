@@ -1,0 +1,26 @@
+﻿@model WebApp.Models.User
+
+@{
+    ViewData["Title"] = "New User";
+}
+
+<div class="row align-content-center">
+    <div class="col col-sm-12 col-md-8 offset-md-2">
+        <h1>Role register</h1>
+        @using (Html.BeginForm("newUser", "Home", FormMethod.Post))
+        {
+            <div class="form-group">
+                <label asp-for="Name">Name</label>
+                <input asp-for="Name" type="text" class="form-control" placeholder="name" autofocus="autofocus">
+                <span asp-validation-for="Name" class="text-danger"></span>
+                @*@Html.ValidationMessageFor(role => role.name, null, new {@class = "text-danger"})*@
+            </div>
+
+            <div>
+                <button class="btn btn-primary" type="submit">Enviar</button>
+                <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+            </div>
+        }
+    </div>
+</div>
+
