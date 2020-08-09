@@ -5,29 +5,69 @@
 }
 
 <h1>Users</h1>
-<div>
-    <a class="btn btn-primary" asp-controller="Home" asp-action="newUser">New</a>
+<br>
+<div class="row">
+    <div class="col">
+        <a class="btn btn-primary" asp-controller="Home" asp-action="newUser">
+            <svg id="i-plus" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="1.2em" height="1.2em" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                <path d="M16 2 L16 30 M2 16 L30 16"/>
+            </svg> New
+        </a>
+    </div>
 </div>
-<div class="table-responsive">
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Name</th>
-            <th scope="col">Delete</th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td>@user.IdUsuario</td>
-                <td>@user.Name</td>
-                <td>
-                    <a class="btn btn-danger" asp-controller="Home" asp-action="delete" asp-route-idUser="@user.IdUsuario">Delete</a>
-                </td>
-            </tr>
-        }
-        </tbody>
-    </table>
+<br>
+<div class="row">
+    <div class="col">
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Delete</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.IdUsuario</td>
+                        <td>@user.Name</td>
+                        <td>
+                            <button id="deleteButton" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="confirmDelete(@user.IdUsuario, '@user.Name')">
+                                <svg id="i-trash" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="1.2em" height="1.2em" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                    <path d="M28 6 L6 6 8 30 24 30 26 6 4 6 M16 12 L16 24 M21 12 L20 24 M11 12 L12 24 M12 6 L13 2 19 2 20 6"/>
+                                </svg>
+                            </button>
+                            @*<a class="btn btn-danger" asp-controller="Home" asp-action="delete" asp-route-idUser="@user.IdUsuario">Delete</a>*@
+                        </td>
+                    </tr>
+                }
+                @*<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="deleteModalLabel">Delete User</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure to delete the user with id @user.IdUsuario</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                <a class="btn btn-danger" asp-controller="Home" asp-action="delete" asp-route-idUser="@user.IdUsuario">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="modal">
+
 </div>
