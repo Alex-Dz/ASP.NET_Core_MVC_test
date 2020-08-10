@@ -22,13 +22,8 @@ namespace WebApp.Controllers
 
         public IActionResult Index()
         {
-            List<Usuario> allUsers = new List<Usuario>();
-            using (var DB = new webapptestdbContext())
-            {
-                allUsers = DB.Usuario.ToList();
-            }
-
-            return View(allUsers);
+            User user = new User();
+            return View(user.getAllUsers());
         }
 
         [HttpGet]
@@ -43,16 +38,7 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                using (var db = new webapptestdbContext())
-                {
-                    Usuario userDB = new Usuario()
-                    {
-                        Name = user.Name
-                    };
-                    db.Usuario.Add(userDB);
-                    db.SaveChanges();
-                }
-
+                user.saveUser(user);
                 return RedirectToAction("Index");
             }
 
@@ -62,68 +48,41 @@ namespace WebApp.Controllers
         [HttpGet]
         public IActionResult editUser(int idUser)
         {
-            List<Usuario> allUsers = new List<Usuario>();
-            using (var db = new webapptestdbContext())
+            User user = new User();
+            user = user.getUserById(idUser);
+            if (user != null)
             {
-                Usuario userDB = db.Usuario.Find(idUser);
-                if (userDB != null)
-                {
-                    User user = new User()
-                    {
-                        IdUsuario = userDB.IdUsuario,
-                        Name = userDB.Name
-                    };
-                    return View("newUser", user);
-                }
-                else
-                {
-                    ViewData["userNotFound"] = true;
-                    allUsers = db.Usuario.ToList();
-                }
+                return View("newUser", user);
             }
-
-            return View("Index", allUsers);
+            else
+            {
+                ViewData["userNotFound"] = true;
+                return View("Index", user.getAllUsers());
+            }
         }
 
         [HttpPost]
         public IActionResult editUser(User user)
         {
-            List<Usuario> allUsers = new List<Usuario>();
-            using (var db = new webapptestdbContext())
+            user = user.updateUser(user);
+            if (user != null)
             {
-                Usuario userDB = db.Usuario.Find(user.IdUsuario);
-                if (userDB != null)
-                {
-                    userDB.Name = user.Name;
-                    db.Entry(userDB).State = EntityState.Modified;
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    ViewData["userNotFound"] = true;
-                    allUsers = db.Usuario.ToList();
-                }
+                return RedirectToAction("Index");
             }
-
-            return View("Index", allUsers);
+            else
+            {
+                ViewData["userNotFound"] = true;
+                return View("Index", user.getAllUsers());
+            }
         }
 
         [HttpGet]
         public IActionResult deleteUser(int idUser)
         {
-            using (var DB = new webapptestdbContext())
-            {
-                Usuario userDB = new Usuario();
-                userDB = DB.Usuario.Find(idUser);
-                if (userDB != null)
-                {
-                    DB.Remove(userDB);
-                    DB.SaveChanges();
-                }
-            }
+            User user = new User();
+            user.deleteUser(idUser);
 
-            return Redirect("/");
+            return RedirectToAction("Index");
         }
 
         public IActionResult Other()
