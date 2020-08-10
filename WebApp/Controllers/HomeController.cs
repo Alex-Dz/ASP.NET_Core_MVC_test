@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WebApp.Models;
 using WebApp.Models.DB;
@@ -29,14 +30,14 @@ namespace WebApp.Controllers
 
             return View(allUsers);
         }
-        
+
         [HttpGet]
         public IActionResult newUser()
         {
             User user = new User();
             return View(user);
         }
-        
+
         [HttpPost]
         public IActionResult newUser(User user)
         {
@@ -54,11 +55,62 @@ namespace WebApp.Controllers
 
                 return RedirectToAction("Index");
             }
+
             return View(user);
         }
-        
+
         [HttpGet]
-        public IActionResult delete(int idUser)
+        public IActionResult editUser(int idUser)
+        {
+            List<Usuario> allUsers = new List<Usuario>();
+            using (var db = new webapptestdbContext())
+            {
+                Usuario userDB = db.Usuario.Find(idUser);
+                if (userDB != null)
+                {
+                    User user = new User()
+                    {
+                        IdUsuario = userDB.IdUsuario,
+                        Name = userDB.Name
+                    };
+                    return View("newUser", user);
+                }
+                else
+                {
+                    ViewData["userNotFound"] = true;
+                    allUsers = db.Usuario.ToList();
+                }
+            }
+
+            return View("Index", allUsers);
+        }
+
+        [HttpPost]
+        public IActionResult editUser(User user)
+        {
+            List<Usuario> allUsers = new List<Usuario>();
+            using (var db = new webapptestdbContext())
+            {
+                Usuario userDB = db.Usuario.Find(user.IdUsuario);
+                if (userDB != null)
+                {
+                    userDB.Name = user.Name;
+                    db.Entry(userDB).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewData["userNotFound"] = true;
+                    allUsers = db.Usuario.ToList();
+                }
+            }
+
+            return View("Index", allUsers);
+        }
+
+        [HttpGet]
+        public IActionResult deleteUser(int idUser)
         {
             using (var DB = new webapptestdbContext())
             {

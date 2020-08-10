@@ -4,7 +4,7 @@
 // Write your JavaScript code.
 
 function confirmDelete(idUsuario, name) {
-    var url = '/Home/delete?idUser=' + idUsuario;
+    var url = '/Home/deleteUser?idUser=' + idUsuario;
 
     $('#deleteModal').remove();
 
@@ -29,4 +29,8 @@ function confirmDelete(idUsuario, name) {
         '                </div>');
 
 
-}
+};
+
+$(document).ready(function () {
+    $('.toast').toast('show');
+});

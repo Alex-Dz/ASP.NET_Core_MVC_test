@@ -24,6 +24,7 @@
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Name</th>
+                    <th scope="col">Edit</th>
                     <th scope="col">Delete</th>
                 </tr>
                 </thead>
@@ -34,12 +35,19 @@
                         <td>@user.IdUsuario</td>
                         <td>@user.Name</td>
                         <td>
+                            <a class="btn btn-primary" asp-controller="Home" asp-action="editUser" asp-route-idUser="@user.IdUsuario">
+                                <svg id="i-edit" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="1.2em" height="1.2em" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                                    <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"/>
+                                </svg>
+                            </a>
+                        </td>
+                        <td>
                             <button id="deleteButton" type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal" onclick="confirmDelete(@user.IdUsuario, '@user.Name')">
                                 <svg id="i-trash" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="1.2em" height="1.2em" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
                                     <path d="M28 6 L6 6 8 30 24 30 26 6 4 6 M16 12 L16 24 M21 12 L20 24 M11 12 L12 24 M12 6 L13 2 19 2 20 6"/>
                                 </svg>
                             </button>
-                            @*<a class="btn btn-danger" asp-controller="Home" asp-action="delete" asp-route-idUser="@user.IdUsuario">Delete</a>*@
+                            @*<a class="btn btn-danger" asp-controller="Home" asp-action="deleteUser" asp-route-idUser="@user.IdUsuario">Delete</a>*@
                         </td>
                     </tr>
                 }
@@ -71,3 +79,27 @@
 <div id="modal">
 
 </div>
+
+@if (ViewData["userNotFound"] != null
+     && (bool) ViewData["userNotFound"] == true)
+{
+    <!-- Flexbox container for aligning the toasts -->
+    <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-end align-items-end">
+
+        <!-- Then put toasts within -->
+        <div class="toast" role="alert" data-delay="3000" data-autohide="true" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <svg id="i-alert" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="1.2em" height="1.2em" fill="none" stroke="currentcolor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
+                    <path d="M16 3 L30 29 2 29 Z M16 11 L16 19 M16 23 L16 25"/>
+                </svg>
+                <strong class="mr-auto"> Error</strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body">
+                User can't be updated because not found or not Exist!.
+            </div>
+        </div>
+    </div>
+}
