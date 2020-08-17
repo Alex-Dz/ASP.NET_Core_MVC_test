@@ -11,12 +11,13 @@ namespace WebApp.Models
     public class User
     {
         public int IdUsuario { get; set; }
-        
+
         [Required(ErrorMessage = "Campo obligatorio")]
+        [NotNull]
         [StringLength(45, ErrorMessage = "Máximo 45 caracteres")]
         public string Name { get; set; }
-        
-        
+
+
         /*    methods for accessing DB    */
 
         public List<Usuario> getAllUsers()
@@ -49,7 +50,7 @@ namespace WebApp.Models
             }
         }
 
-        public void saveUser(User newUser)
+        public User saveUser(User newUser)
         {
             using (var db = new webapptestdbContext())
             {
@@ -59,7 +60,11 @@ namespace WebApp.Models
                 };
                 db.Usuario.Add(newUserDB);
                 db.SaveChanges();
+                newUserDB = db.Usuario.ToList().Where(user => user.Name == newUser.Name).Last();
+                newUser.IdUsuario = newUserDB.IdUsuario;
             }
+
+            return newUser;
         }
 
         public User updateUser(User user)
@@ -79,7 +84,7 @@ namespace WebApp.Models
             }
         }
 
-        public void deleteUser(int idUser)
+        public bool deleteUser(int idUser)
         {
             using (var DB = new webapptestdbContext())
             {
@@ -88,7 +93,10 @@ namespace WebApp.Models
                 {
                     DB.Remove(userDB);
                     DB.SaveChanges();
+                    return true;
                 }
+
+                return false;
             }
         }
     }
